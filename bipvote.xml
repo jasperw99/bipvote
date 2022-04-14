@@ -3,7 +3,9 @@
 <form>
 <block>
 <prompt>
-Hello World!
+Here's a real audio sample in French:<break/>
+<audio src="http://www.few.vu.nl/~vbr240/voices/LTE/communique.wav"/>
+Mafounay
 </prompt>
 </block>
 </form>
