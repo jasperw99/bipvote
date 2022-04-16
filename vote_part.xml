@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<vxml version="2.0" xmlns="http://www.w3.org/2001/vxml" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.w3.org/2001/vxml 
+   http://www.w3.org/TR/voicexml20/vxml.xsd">
+<form id="get_vote_option">
+ <block>We need to know what is your vote and if you have an opinion</block>
+ <field name="vote_type">
+  <prompt count="1">What is your vote?</prompt>
+  <!-- This is an inline grammar. -->
+  <grammar type="application/srgs+xml" root="r2" version="1.0">
+    <rule id="r2" scope="public">
+       <one-of>
+       <item>Yes</item>
+       <item>No</item>
+       </one-of>
+    </rule>
+  </grammar>
+  <help> Please say Yes or No.</help>
+ </field>
+
+ 
+ <field name="confirm">
+  <grammar type="application/srgs+xml" src="/grammars/boolean.grxml"/>
+  <prompt>
+      I have registered a vote of <value expr="vote_type"/> from you. 
+      Is this correct?
+  </prompt>
+  <filled>
+    <if cond="confirm">
+      <!-- This will need appropriate backend later -->
+      <submit next="place_order.asp"
+        namelist="vote_type"/>
+    </if>
+    <clear namelist="vote_type confirm"/>
+  </filled>
+ </field>
+</form>
+</vxml>
