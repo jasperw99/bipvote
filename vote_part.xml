@@ -6,7 +6,7 @@
 <form id="get_vote_option">
  <block>We need to know what is your vote and if you have an opinion</block>
  <field name="vote_type">
-  <prompt count="1">What is your vote?</prompt>
+  <prompt> What is your vote?</prompt>
   <!-- This is an inline grammar. -->
   <grammar type="application/srgs+xml" root="r2" version="1.0">
     <rule id="r2" scope="public">
