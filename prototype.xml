@@ -15,7 +15,7 @@
         <prompt>Press dial key 4 for ending this call.</prompt>
         <choice next="#voteFormYes"> Yes </choice>
         <choice next="#voteFormNo"> No </choice>
-        <choice next="#opinionForm"> I have an opinion </choice>
+        <choice next="#opinionForm"> Opinion </choice>
         <choice event="quitEvent"> Quit </choice>
     </menu>
   
@@ -41,7 +41,6 @@
             </noinput>
         </record>
         <field name="confirm">
-            <grammar type="application/srgs+xml" src="/grammars/boolean.grxml"/>
             <prompt>
                 Your message is <audio expr="msg"/>.
             </prompt>
