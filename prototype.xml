@@ -42,7 +42,7 @@
         </record>
         <field name="confirm">
             <prompt>
-                Your message is <audio expr="msg"/>.
+                Your opinion is <audio expr="msg"/>.
             </prompt>
             <prompt>
                 To keep it, say yes.  To discard it, say no.
