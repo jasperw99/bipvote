@@ -1,94 +1,245 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<vxml version="2.0" xmlns="http://www.w3.org/2001/vxml" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xsi:schemaLocation="http://www.w3.org/2001/vxml 
-   http://www.w3.org/TR/voicexml20/vxml.xsd">
-<form id="get_card_info">
- <block>We now need your credit card type, number,
-    and expiration date.</block>
- <field name="card_type">
-  <prompt count="1">What kind of credit card
-    do you have?</prompt>
-  <prompt count="2">Type of card?</prompt>
-  <!-- This is an inline grammar. -->
-  <grammar type="application/srgs+xml" root="r2" version="1.0">
-    <rule id="r2" scope="public">
-       <one-of>
-       <item>visa</item>
-       <item>master <item repeat="0-1">card</item></item>
-       <item>amex</item>
-       <item>american express</item>
-       </one-of>
-    </rule>
-  </grammar>
-  <help> Please say Visa, MasterCard, or American Express.</help>
- </field>
+<?xml version="1.0"?>
+<!DOCTYPE vxml PUBLIC '-//Vision/DTD VoiceXML 2.1//EN' 
+   'http://dtd.vision.com/voice/2.1/vision_voicexml-2.1.dtd'>
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml">
+   
+    <!--Choose Language-->
+    <menu id="chooseLanguage" dtmf="true">
+        <prompt>Press dial key 1 or say English for continuing in English</prompt>
+        <prompt xml:lang="it-it" timeout="1s">Press dial key 2 or say Italian for continuing in Italian</prompt>
+        <choice next="#mainEn"> English </choice>
+        <choice next="#mainIt"> Italian </choice>
+    </menu>
 
- <field name="card_num">
-  <grammar type="application/srgs+xml" src="/grammars/digits.grxml"/>
-  <prompt count="1">What is your card number?</prompt>
-  <prompt count="2">Card number?</prompt>
-  <catch event="help">
-  <if cond="card_type =='amex' || card_type =='american express'">
-       Please say or key in your 15 digit card number.
-     <else/>
-       Please say or key in your 16 digit card number.
-     </if>
-  </catch>
-  <filled>
-     <if cond="(card_type == 'amex' || card_type =='american express') 
-          &amp;&amp; card_num.length != 15">
-       American Express card numbers must have 15 digits.
-       <clear namelist="card_num"/>
-       <throw event="nomatch"/>
-     <elseif cond="card_type != 'amex'
-                &amp;&amp; card_type !='american express'
-                &amp;&amp; card_num.length != 16"/>
-       MasterCard and Visa card numbers have 16 digits.
-       <clear namelist="card_num"/>
-       <throw event="nomatch"/>
-     </if>
-  </filled>
- </field>
 
- <field name="expiry_date">
-   <grammar type="application/srgs+xml" src="/grammars/digits.grxml"/>
-   <prompt count="1">What is your card's expiration date?</prompt>
-   <prompt count="2">Expiration date?</prompt>
-  <help>
-     Say or key in the expiration date, for example one two oh one.
-  </help>
-  <filled>
-     <!-- validate the mmyy -->
-     <var name="mm"/>
-     <var name="i" expr="expiry_date.length"/>
-     <if cond="i == 3">
-       <assign name="mm" expr="expiry_date.substring(0,1)"/>
-     <elseif cond="i == 4"/>
-       <assign name="mm" expr="expiry_date.substring(0,2)"/>
-     </if>
-     <if cond="mm == '' || mm &lt; 1 || mm &gt; 12">
-       <clear namelist="expiry_date"/>
-       <throw event="nomatch"/>
-     </if>
-  </filled>
- </field>
+   <!--English Language-->
+    <form id="mainEn">
+        <field name="choosevoteoropinion">
+            <prompt>Do you want to vote, or do you want to express an opinion?</prompt>
+            <help>Please say Vote or Opinion.</help>
+            <grammar  mode="voice" root="vop">
+                <rule id="vop" scope="public">
+                    <one-of>
+                        <item>vote</item>
+                        <item>opinion</item>
+                    </one-of>
+                </rule>
+            </grammar>
+        </field>
+        <filled>
+                <if cond="choosevoteoropinion == 'vote'">You choose to vote.
+                    <goto next="#voteEn"/>
+                <else/>You choose to express your opinion.
+                    <goto next="#opinionEn"/>
+                </if>
+        </filled>
+    </form>
+    <form id="voteEn"> <!--Vote part-->
+        <field name="choosevote">
+            <prompt>What is your vote?</prompt>
+            <help>Please say Yes or No.</help>
+            <grammar  mode="voice" root="vop2">
+                <rule id="vop2" scope="public">
+                    <one-of>
+                        <item>yes</item>
+                        <item>no</item>
+                    </one-of>
+                </rule>
+            </grammar>
+        </field>
+        <filled>
+                <if cond="choosevote == 'yes'">
+                    <goto next="#voteFormYesEn"/>
+                <else/>
+                    <goto next="#voteFormNoEn"/>
+                </if>
+        </filled>
+    </form>
+    <form id="voteFormYesEn"> <!--Vote Yes-->
+            <field name="choosevoteYes">
+                <prompt>You choose Yes as your vote.</prompt>
+                <prompt>Are you sure that your vote is corect?</prompt>
+                <help>Please say Yes or No.</help>
+                <grammar  mode="voice" root="vopYes">
+                    <rule id="vopYes" scope="public">
+                        <one-of>
+                            <item>yes</item>
+                            <item>no</item>
+                        </one-of>
+                    </rule>
+                </grammar>
+            </field>
+            <filled>
+                <if cond="choosevoteYes == 'no'">
+                    <goto next="#mainEn"/>
+                <else/>
+                    <prompt>Thank you for your vote!</prompt>
+                </if>
+            </filled>
+    </form>
+    <form id="voteFormNoEn"> <!--Vote No-->
+            <field name="choosevoteNo">
+                <prompt>You choose No as your vote.</prompt>
+                <prompt>Are you sure that your vote is corect?</prompt>
+                <help>Please say Yes or No.</help>
+                <grammar  mode="voice" root="vopNo">
+                    <rule id="vopNo" scope="public">
+                        <one-of>
+                            <item>yes</item>
+                            <item>no</item>
+                        </one-of>
+                    </rule>
+                </grammar>
+            </field>
+            <filled>
+                <if cond="choosevoteNo == 'no'">
+                    <goto next="#mainEn"/>
+                <else/>
+                    <prompt>Thank you for your vote!</prompt>
+                </if>
+            </filled>            
+    </form>
+    <form id="opinionEn"> <!--Opinion-->
+        <record  name="msg" beep="true" maxtime="10s" finalsilence="4000ms"
+            dtmfterm="true" type="audio/x-wav">
+            <prompt timeout="5s">
+                Record your opinion after the beep.
+            </prompt>
+            <noinput>
+                I didn't hear anything, please try again.
+            </noinput>
+        </record>
+        <field name="confirm">
+            <prompt>
+                Your opinion is <audio expr="msg"/>.
+            </prompt>
+            <prompt>
+                To keep it, say yes. To discard it, say no.
+            </prompt>
+            <filled>
+                <if cond="confirm">
+                    <submit next="save_message.pl" enctype="multipart/form-data"
+                        method="post" namelist="msg"/>
+                </if>
+                <clear/>
+            </filled>
+        </field>
+    </form>
 
- <field name="confirm">
-  <grammar type="application/srgs+xml" src="/grammars/boolean.grxml"/>
-  <prompt>
-      I have <value expr="card_type"/> number
-      <value expr="card_num"/>, expiring on
-      <value expr="expiry_date"/>.
-      Is this correct?
-  </prompt>
-  <filled>
-    <if cond="confirm">
-      <submit next="place_order.asp"
-        namelist="card_type card_num expiry_date"/>
-    </if>
-    <clear namelist="card_type card_num expiry_date confirm"/>
-  </filled>
- </field>
-</form>
+
+
+   <!--Italian Language-->
+    <form id="mainIt">
+        <field name="choosevoteoropinion">
+            <prompt xml:lang="it-it">Do you want to vote, or do you want to express an opinion?</prompt>
+            <help>Si prega di dire Vota o Opinione.</help>
+            <grammar  mode="voice" root="vop">
+                <rule id="vop" scope="public">
+                    <one-of>
+                        <item>votazione</item>
+                        <item>opinion</item>
+                    </one-of>
+                </rule>
+            </grammar>
+        </field>
+        <filled>
+                <if cond="choosevoteoropinion == 'votazione'">Hai scelto di votare.
+                    <goto next="#voteIt"/>
+                <else/>Scegli di esprimere la tua opinione.
+                    <goto next="#opinionIt"/>
+                </if>
+        </filled>
+    </form>
+    <form id="voteIt"> <!--Vote part-->
+        <field name="choosevote">
+            <prompt xml:lang="it-it">What is your vote?</prompt>
+            <help>Si prega di dire Si o No.</help>
+            <grammar  mode="voice" root="vop2">
+                <rule id="vop2" scope="public">
+                    <one-of>
+                        <item>si</item>
+                        <item>no</item>
+                    </one-of>
+                </rule>
+            </grammar>
+        </field>
+        <filled>
+                <if cond="choosevote == 'si'">
+                    <goto next="#voteFormYesIt"/>
+                <else/>
+                    <goto next="#voteFormNoIt"/>
+                </if>
+        </filled>
+    </form>
+    <form id="voteFormYesIt"> <!--Vote Yes-->
+            <field name="choosevoteYes">
+                <prompt xml:lang="it-it">You choose Yes as your vote.</prompt>
+                <prompt xml:lang="it-it">Are you sure that your vote is corect?</prompt>
+                <help>Si prega di dire Si o No.</help>
+                <grammar  mode="voice" root="vopYes">
+                    <rule id="vopYes" scope="public">
+                        <one-of>
+                            <item>si</item>
+                            <item>no</item>
+                        </one-of>
+                    </rule>
+                </grammar>
+            </field>
+            <filled>
+                <if cond="choosevoteYes == 'no'">
+                    <goto next="#mainIt"/>
+                <else/>
+                    <prompt xml:lang="it-it">Thank you for your vote!</prompt>
+                </if>
+            </filled>
+    </form>
+    <form id="voteFormNoIt"> <!--Vote No-->
+            <field name="choosevoteNo">
+                <prompt xml:lang="it-it">You choose No as your vote.</prompt>
+                <prompt xml:lang="it-it">Are you sure that your vote is corect?</prompt>
+                <help>Si prega di dire Si o No.</help>
+                <grammar  mode="voice" root="vopNo">
+                    <rule id="vopNo" scope="public">
+                        <one-of>
+                            <item>si</item>
+                            <item>no</item>
+                        </one-of>
+                    </rule>
+                </grammar>
+            </field>
+            <filled>
+                <if cond="choosevoteNo == 'no'">
+                    <goto next="#mainIt"/>
+                <else/>
+                    <prompt xml:lang="it-it">Thank you for your vote!</prompt>
+                </if>
+            </filled>            
+    </form>
+    <form id="opinionIt"> <!--Opinion-->
+        <record  name="msg" beep="true" maxtime="10s" finalsilence="4000ms"
+            dtmfterm="true" type="audio/x-wav">
+            <prompt xml:lang="it-it" timeout="5s">
+                Record your opinion after the beep.
+            </prompt>
+            <noinput>
+                Non ho sentito nulla, riprova.
+            </noinput>
+        </record>
+        <field name="confirm">
+            <prompt xml:lang="it-it">
+                Your opinion is <audio expr="msg"/>.
+            </prompt>
+            <prompt xml:lang="it-it">
+                To keep it, say yes. To discard it, say no.
+            </prompt>
+            <filled>
+                <if cond="confirm">
+                    <submit next="save_message.pl" enctype="multipart/form-data"
+                        method="post" namelist="msg"/>
+                </if>
+                <clear/>
+            </filled>
+        </field>
+    </form>
+
 </vxml>
