@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!DOCTYPE vxml PUBLIC '-//Vision/DTD VoiceXML 2.1//EN' 
+   'http://dtd.vision.com/voice/2.1/vision_voicexml-2.1.dtd'>
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml">
+    <catch event="quitEvent">
+        Have a nice day!
+        <exit/>
+    </catch>
+
+    <menu id="main" dtmf="true">
+        <prompt xml:lang="it-it">What is your vote? Or do you have an opinion?</prompt>
+        <prompt xml:lang="it-it" timeout="2s">Press dial key 1 for Yes</prompt>
+        <prompt xml:lang="it-it" timeout="2s">Press dial key 2 for No</prompt>
+        <prompt xml:lang="it-it" timeout="2s">Press dial key 3 for Opinion</prompt>
+        <prompt xml:lang="it-it" timeout="2s">Press dial key 4 for ending this call.</prompt>
+        <choice next="#voteFormYes"> Yes </choice>
+        <choice next="#voteFormNo"> No </choice>
+        <choice next="#opinionForm"> Opinion </choice>
+        <choice event="quitEvent"> Quit </choice>
+    </menu>
+  
+
+    <form id="voteFormYes">
+        <block>
+          <prompt xml:lang="it-it">You choose Yes as your vote.</prompt>
+        </block>
+    </form>
+    <form id="voteFormNo">
+        <block>
+            <prompt xml:lang="it-it">You choose No as your vote.</prompt>
+        </block>
+    </form>
+    <form id="opinionForm">
+        <record  name="msg" beep="true" maxtime="10s" finalsilence="4000ms"
+            dtmfterm="true" type="audio/x-wav">
+            <prompt xml:lang="it-it" timeout="5s">
+                Record a message after the beep.
+            </prompt>
+            <noinput>
+                I didn't hear anything, please try again.
+            </noinput>
+        </record>
+        <field name="confirm">
+            <prompt xml:lang="it-it">
+                Your opinion is <audio expr="msg"/>.
+            </prompt>
+            <prompt xml:lang="it-it">
+                To keep it, say yes.  To discard it, say no.
+            </prompt>
+            <filled>
+                <if cond="confirm">
+                    <submit next="save_message.pl" enctype="multipart/form-data"
+                        method="post" namelist="msg"/>
+                </if>
+                <clear/>
+            </filled>
+        </field>
+    </form>
+</vxml>
