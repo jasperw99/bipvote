@@ -9,10 +9,10 @@
 
     <menu id="main" dtmf="true">
         <prompt>What is your vote? Or do you have an opinion?</prompt>
-        <prompt>Press dial key 1 for Yes</prompt>
-        <prompt>Press dial key 2 for No</prompt>
-        <prompt>Press dial key 3 for Opinion</prompt>
-        <prompt>Press dial key 4 for ending this call.</prompt>
+        <prompt timeout="2s">Press dial key 1 for Yes</prompt>
+        <prompt timeout="2s">Press dial key 2 for No</prompt>
+        <prompt timeout="2s">Press dial key 3 for Opinion</prompt>
+        <prompt timeout="2s">Press dial key 4 for ending this call.</prompt>
         <choice next="#voteFormYes"> Yes </choice>
         <choice next="#voteFormNo"> No </choice>
         <choice next="#opinionForm"> Opinion </choice>
