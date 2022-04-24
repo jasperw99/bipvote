@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE vxml PUBLIC '-//Vision/DTD VoiceXML 2.1//EN' 
+   'http://dtd.vision.com/voice/2.1/vision_voicexml-2.1.dtd'>
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml">
+   
+
+    <menu id="chooseLanguage" dtmf="true">
+        <prompt>Press dial key 1 or say English for continuing in English</prompt>
+        <prompt xml:lang="it-it">Press dial key 2 or say Italian for continuing in Italian</prompt>
+        <choice next="#mainEn"> English </choice>
+        <choice next="#mainIt"> Italian </choice>
+    </menu>
+
+   
+    <form id="mainEn">
+         <submit next="https://github.com/jasperw99/bipvote/blob/main/mainEn.xml"/>
+    </form>
+
+    <form id="mainIt">
+         <submit next="https://github.com/jasperw99/bipvote/blob/main/mainIt.xml"/>
+    </form>
+
+</vxml>
