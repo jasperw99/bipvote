@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% load static %}
+<link rel="stylesheet" href="{% static 'dashboard/css/bootstrap.min.css' %}">
+</head>
+<script src="{% static 'dashboard/js/chart.min.js' %}"></script>
+
+<div class="container">
+    <div class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'dashboard/img/mali.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+            BipVote++ Dashboard
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col col-lg-6 align-self-center">
+            <canvas class="p-3" id="myChart"></canvas>
+
+            <script>
+                var xValues = ["Yes", "No"];
+                var yValues = [{{latest_pos_opinion_nr | safe}}, {{latest_neg_opinion_nr | safe}}];
+                var barColors = [
+                  "#198754",
+                  "#dc3545"
+                ];
+                
+                new Chart("myChart", {
+                  type: "pie",
+                  data: {
+                    labels: xValues,
+                    datasets: [{
+                      backgroundColor: barColors,
+                      data: yValues
+                    }]
+                  },
+                  options: {
+                    plugins:{
+                    legend: {
+                      position: 'right',
+                      labels:{
+                      font: {
+                        size: 16,
+                      }
+                      }
+                    }
+                    }
+                    
+                  }
+                });
+                </script>
+        </div>
+    </div>
+
+  <div class="row">
+    <div class="col">
+      <ul class="list-group">
+          <li class="list-group-item bg-success text-light">Agree</li>
+          {% if pos_opinion %}
+          {% for opinion in pos_opinion %}
+          <li class="d-flex flex-row bd-highlight list-group-item">
+              <div class="p-2 bd-highlight">
+                  <audio controls>
+                      <source src="{{ opinion.vote_opinion }}" type="audio/wav">
+                    Your browser does not support the audio element.
+                    </audio>
+              </div>
+              <div class="p-2 bd-highlight align-self-center"><span class="align-text-bottom">{{ opinion.pub_date | date:"l d M Y H:i" }}</span></div>
+          </li>
+          {% endfor %}
+          {% else %}
+          <li class="d-flex flex-row bd-highlight list-group-item">
+  
+            <div class="p-2 bd-highlight align-self-center"><span class="align-text-bottom">No opinions yet.</span></div>
+        </li>
+          {% endif %}
+      </ul>
+  </div>
+
+  <div class="col">
+    <ul class="list-group">
+        <li class="list-group-item bg-danger text-light">Disagree</li>
+        {% if neg_opinion %}
+        {% for opinion in neg_opinion %}
+        <li class="d-flex flex-row bd-highlight list-group-item">
+            <div class="p-2 bd-highlight">
+                <audio controls>
+                    <source src="{{ opinion.vote_opinion }}" type="audio/wav">
+                  Your browser does not support the audio element.
+                  </audio>
+            </div>
+            <div class="p-2 bd-highlight align-self-center"><span class="align-text-bottom">{{ opinion.pub_date | date:"l d M Y H:i" }}</span></div>
+        </li>
+        {% endfor %}
+        {% else %}
+        <li class="d-flex flex-row bd-highlight list-group-item">
+
+          <div class="p-2 bd-highlight align-self-center"><span class="align-text-bottom">No opinions yet.</span></div>
+      </li>
+      {% endif %}
+
+    </ul>
+</div>
+  
+  </div>
+
+</div>
+
+</html>
