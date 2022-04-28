@@ -73,7 +73,7 @@
                 <if cond="choosevoteYes == 'no'">
                     <goto next="#mainEn"/>
                 <else/>
-                    <prompt>Thank you for your vote!</prompt>
+                    <goto next="#opinionAfterVoteEn"/>
                 </if>
             </filled>
     </form>
@@ -95,9 +95,31 @@
                 <if cond="choosevoteNo == 'no'">
                     <goto next="#mainEn"/>
                 <else/>
-                    <prompt>Thank you for your vote!</prompt>
+                    <goto next="#opinionAfterVoteEn"/>
                 </if>
             </filled>            
+    </form>
+    <form id="opinionAfterVoteEn"> <!--Opinion AFTER Voting-->
+            <field name="opinionAfterVote">
+                <prompt>Do you also want to express your opinion?</prompt>
+                <help>Please say Yes or No.</help>
+                <grammar  mode="voice" root="vfy">
+                    <rule id="vfy" scope="public">
+                        <one-of>
+                            <item>yes</item>
+                            <item>no</item>
+                        </one-of>
+                    </rule>
+                </grammar>
+            </field>
+            <filled>
+                <if cond="opinionAfterVote == 'no'">
+                    <prompt>Thank you for your vote!</prompt>
+                    <goto next="#mainEn"/>
+                <else/>
+                    <goto next="#opinionEn"/>
+                </if>
+            </filled>                
     </form>
     <form id="opinionEn"> <!--Opinion-->
         <record  name="msg" beep="true" maxtime="10s" finalsilence="4000ms"
@@ -189,7 +211,7 @@
                 <if cond="choosevoteYes == 'no'">
                     <goto next="#mainIt"/>
                 <else/>
-                    <prompt xml:lang="it-it">Thank you for your vote!</prompt>
+                    <goto next="#opinionAfterVoteIt"/>
                 </if>
             </filled>
     </form>
@@ -211,9 +233,31 @@
                 <if cond="choosevoteNo == 'no'">
                     <goto next="#mainIt"/>
                 <else/>
-                    <prompt xml:lang="it-it">Thank you for your vote!</prompt>
+                    <goto next="#opinionAfterVoteIt"/>
                 </if>
             </filled>            
+    </form>
+    <form id="opinionAfterVoteIt"> <!--Opinion AFTER Voting-->
+            <field name="opinionAfterVote">
+                <prompt xml:lang="it-it">Do you also want to express your opinion?</prompt>
+                <help>Please say Yes or No.</help>
+                <grammar  mode="voice" root="vfy">
+                    <rule id="vfy" scope="public">
+                        <one-of>
+                            <item>si</item>
+                            <item>no</item>
+                        </one-of>
+                    </rule>
+                </grammar>
+            </field>
+            <filled>
+                <if cond="opinionAfterVote == 'no'">
+                    <prompt xml:lang="it-it">Thank you for your vote!</prompt>
+                    <goto next="#mainEn"/>
+                <else/>
+                    <goto next="#opinionEn"/>
+                </if>
+            </filled>                
     </form>
     <form id="opinionIt"> <!--Opinion-->
         <record  name="msg" beep="true" maxtime="10s" finalsilence="4000ms"
