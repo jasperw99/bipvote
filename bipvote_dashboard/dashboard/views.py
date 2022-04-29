@@ -14,7 +14,7 @@ import datetime
 def index(request):
     latest_topic = Topic.objects.order_by('-pub_date').first()
     if(not latest_topic):
-        context = {'pos_opinion': None, 'neg_opinion': None, 'latest_pos_opinion_nr': 0, 'latest_neg_opinion_nr': l0}
+        context = {'pos_opinion': None, 'neg_opinion': None, 'latest_pos_opinion_nr': 0, 'latest_neg_opinion_nr': 0}
         return render(request, 'dashboard/index.html', context)
     topic_id = latest_topic.id
     latest_pos_opinion = VoteOpinion.objects.exclude(vote_opinion__isnull=True).filter(topic=topic_id, vote_choice=True).order_by('-pub_date')[:10]
