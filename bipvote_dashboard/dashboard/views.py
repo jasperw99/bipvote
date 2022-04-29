@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django import forms
 from django.db import transaction
+from django.urls import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import F
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
@@ -39,3 +41,11 @@ def vote(request):
 
     return render(request, 'dashboard/success.html')
 
+def topic(request):
+    return render(request, 'dashboard/topic.html')
+
+def process_topic(request):
+    new_topic = Topic()
+    new_topic.topic_str = request.POST['topic_str']
+    new_topic.save()
+    return HttpResponseRedirect(reverse('index'))

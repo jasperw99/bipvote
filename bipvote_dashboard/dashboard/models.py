@@ -5,7 +5,7 @@ from django.utils import timezone
 class Topic(models.Model):
     topic_str = models.CharField(max_length=200, blank=True)
     topic_sound = models.CharField(max_length=200, blank=True)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('date published', default=timezone.now)
     def __str__(self):
         if self.topic_str:
             return self.topic_str
