@@ -2,13 +2,7 @@
 ## Table of contents
 
 - [Quick start](#quick-start)
-- [Status](#status)
-- [What's included](#whats-included)
-- [Bugs and feature requests](#bugs-and-feature-requests)
-- [Contributing](#contributing)
-- [Creators](#creators)
-- [Thanks](#thanks)
-- [Copyright and license](#copyright-and-license)
+- [Usage](#usage)
 
 
 ## Quick start
@@ -37,6 +31,7 @@ You can use the standard Django server for deploying, however it is recommended 
 Therefore we made it possible to deploy with [Gunicorn](https://gunicorn.org/) and we have already made a configuration file to make this easier, you can run it directly with the following command:
 >gunicorn -c config/gunicorn_config.py
  
- ## Usage
+## Usage
 <img src="https://bipvote.ml/public_img/dashboard.png"/>
+
 The usage of the dashboard is quite straightforward, in the **Topics** tab you can create a new topic for your radio broadcast. From that point on the votes will be counted for this topic, the results will be plot in a pie chart. When a listener also drops an opinion to strenghten their vote, they can be listened from the two columns at the bottom. The most recent opinions are shown at top with a timestamp.
