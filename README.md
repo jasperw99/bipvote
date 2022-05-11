@@ -29,7 +29,13 @@ When this is all set up, the dashboard itself should work. To test this you can 
  Now the dashboard works, we should set up the server part of our application. It is preferable to run our service on a VPS with it's own IP-address to make it easier to deploy it. We used Apache as a reverse proxy to make our whole website available to the internet, but in a real use-case it is preferable to keep the dashboard itself local and only make the page to access the POST-requests for voting public. This is due to the fact that everyone can access the dashboard and listen to the opinions as well as creating new topics, which is undesirable.
  
  Changes need to be made to the `.vxml` files to put in the IP-address of your server, also the `ALLOWED_HOSTS` in `settings.py` need to be altered. If you have set the URLS to the right values the dashboard should now work.
+
+### Deploying with Gunicorn
+You can use the standard Django server for deploying, however it is recommended to use a dedicated server to do this more securely, quoting from the Django documentation: 
+>DO NOT USE THIS SERVER IN A PRODUCTION SETTING. It has not gone through security audits or performance tests. (And that’s how it’s gonna stay. We’re in the business of making Web frameworks, not Web servers, so improving this server to be able to handle a production environment is outside the scope of Django.)
+Therefore we made it possible to deploy with [Gunicorn](https://gunicorn.org/) and we have already made a configuration file to make this easier, you can run it directly with the following command:
+>gunicorn -c config/gunicorn_config.py
  
  ## Usage
 <img src="https://bipvote.ml/public_img/dashboard.png"/>
-The usage of the dashboard is quite straightforward, in the *Topics* tab you can create a new topic for your radio broadcast. From that point on the votes will be counted for this topic, the results will be plot in a pie chart. When a listener also drops an opinion to strenghten their vote, they can be listened from the two columns at the bottom. The most recent opinions are shown at top with a timestamp.
+The usage of the dashboard is quite straightforward, in the **Topics** tab you can create a new topic for your radio broadcast. From that point on the votes will be counted for this topic, the results will be plot in a pie chart. When a listener also drops an opinion to strenghten their vote, they can be listened from the two columns at the bottom. The most recent opinions are shown at top with a timestamp.
