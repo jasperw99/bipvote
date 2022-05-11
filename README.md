@@ -31,5 +31,5 @@ When this is all set up, the dashboard itself should work. To test this you can 
  Changes need to be made to the `.vxml` files to put in the IP-address of your server, also the `ALLOWED_HOSTS` in `settings.py` need to be altered. If you have set the URLS to the right values the dashboard should now work.
  
  ## Usage
-<img src="bipvote.ml/public_img/dashboard.png"/>
+<img src="https://bipvote.ml/public_img/dashboard.png"/>
 The usage of the dashboard is quite straightforward, in the *Topics* tab you can create a new topic for your radio broadcast. From that point on the votes will be counted for this topic, the results will be plot in a pie chart. When a listener also drops an opinion to strenghten their vote, they can be listened from the two columns at the bottom. The most recent opinions are shown at top with a timestamp.
