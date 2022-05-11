@@ -33,6 +33,7 @@ When this is all set up, the dashboard itself should work. To test this you can 
 ### Deploying with Gunicorn
 You can use the standard Django server for deploying, however it is recommended to use a dedicated server to do this more securely, quoting from the Django documentation: 
 >DO NOT USE THIS SERVER IN A PRODUCTION SETTING. It has not gone through security audits or performance tests. (And that’s how it’s gonna stay. We’re in the business of making Web frameworks, not Web servers, so improving this server to be able to handle a production environment is outside the scope of Django.)
+
 Therefore we made it possible to deploy with [Gunicorn](https://gunicorn.org/) and we have already made a configuration file to make this easier, you can run it directly with the following command:
 >gunicorn -c config/gunicorn_config.py
  
