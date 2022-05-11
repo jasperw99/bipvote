@@ -1,43 +1,122 @@
 <?xml version="1.0"?>
-<!DOCTYPE vxml PUBLIC '-//Vision/DTD VoiceXML 2.1//EN' 
-   'http://dtd.vision.com/voice/2.1/vision_voicexml-2.1.dtd'>
 <vxml version="2.1" xmlns="http://www.w3.org/2001/vxml">
-    <catch event="quitEvent">
-        Have a nice day!
-        <exit/>
-    </catch>
-
-    <menu id="main" dtmf="true">
-        <prompt xml:lang="it-it">What is your vote? Or do you have an opinion?</prompt>
-        <prompt xml:lang="it-it" timeout="2s">Press dial key 1 for Yes</prompt>
-        <prompt xml:lang="it-it" timeout="2s">Press dial key 2 for No</prompt>
-        <prompt xml:lang="it-it" timeout="2s">Press dial key 3 for Opinion</prompt>
-        <prompt xml:lang="it-it" timeout="2s">Press dial key 4 for ending this call.</prompt>
-        <choice next="#voteFormYes"> Yes </choice>
-        <choice next="#voteFormNo"> No </choice>
-        <choice next="#opinionForm"> Opinion </choice>
-        <choice event="quitEvent"> Quit </choice>
-    </menu>
-  
-
-    <form id="voteFormYes">
-        <block>
-          <prompt xml:lang="it-it">You choose Yes as your vote.</prompt>
-        </block>
+    <!--Italian Language-->
+    <form id="mainIt">
+        <field name="choosevoteoropinion">
+            <prompt xml:lang="it-it">Do you want to vote, or do you want to express an opinion?</prompt>
+            <help>Si prega di dire Vota o Opinione.</help>
+            <grammar  mode="voice" root="vop">
+                <rule id="vop" scope="public">
+                    <one-of>
+                        <item>votazione</item>
+                        <item>opinion</item>
+                    </one-of>
+                </rule>
+            </grammar>
+        </field>
+        <filled>
+                <if cond="choosevoteoropinion == 'votazione'">Hai scelto di votare.
+                    <goto next="#voteIt"/>
+                <else/>Scegli di esprimere la tua opinione.
+                    <goto next="#opinionIt"/>
+                </if>
+        </filled>
     </form>
-    <form id="voteFormNo">
-        <block>
-            <prompt xml:lang="it-it">You choose No as your vote.</prompt>
-        </block>
+    <form id="voteIt"> <!--Vote part-->
+        <field name="choosevote">
+            <prompt xml:lang="it-it">What is your vote?</prompt>
+            <help>Si prega di dire Si o No.</help>
+            <grammar  mode="voice" root="vop2">
+                <rule id="vop2" scope="public">
+                    <one-of>
+                        <item>si</item>
+                        <item>no</item>
+                    </one-of>
+                </rule>
+            </grammar>
+        </field>
+        <filled>
+                <if cond="choosevote == 'si'">
+                    <goto next="#voteFormYesIt"/>
+                <else/>
+                    <goto next="#voteFormNoIt"/>
+                </if>
+        </filled>
     </form>
-    <form id="opinionForm">
+    <form id="voteFormYesIt"> <!--Vote Yes-->
+            <field name="choosevoteYes">
+                <prompt xml:lang="it-it">You choose Yes as your vote.</prompt>
+                <prompt xml:lang="it-it">Are you sure that your vote is corect?</prompt>
+                <help>Si prega di dire Si o No.</help>
+                <grammar  mode="voice" root="vopYes">
+                    <rule id="vopYes" scope="public">
+                        <one-of>
+                            <item>si</item>
+                            <item>no</item>
+                        </one-of>
+                    </rule>
+                </grammar>
+            </field>
+            <filled>
+                <if cond="choosevoteYes == 'no'">
+                    <goto next="#mainIt"/>
+                <else/>
+                    <goto next="#opinionAfterVoteIt"/>
+                </if>
+            </filled>
+    </form>
+    <form id="voteFormNoIt"> <!--Vote No-->
+            <field name="choosevoteNo">
+                <prompt xml:lang="it-it">You choose No as your vote.</prompt>
+                <prompt xml:lang="it-it">Are you sure that your vote is corect?</prompt>
+                <help>Si prega di dire Si o No.</help>
+                <grammar  mode="voice" root="vopNo">
+                    <rule id="vopNo" scope="public">
+                        <one-of>
+                            <item>si</item>
+                            <item>no</item>
+                        </one-of>
+                    </rule>
+                </grammar>
+            </field>
+            <filled>
+                <if cond="choosevoteNo == 'no'">
+                    <goto next="#mainIt"/>
+                <else/>
+                    <goto next="#opinionAfterVoteIt"/>
+                </if>
+            </filled>            
+    </form>
+    <form id="opinionAfterVoteIt"> <!--Opinion AFTER Voting-->
+            <field name="opinionAfterVote">
+                <prompt xml:lang="it-it">Do you also want to express your opinion?</prompt>
+                <help>Please say Yes or No.</help>
+                <grammar  mode="voice" root="vfy">
+                    <rule id="vfy" scope="public">
+                        <one-of>
+                            <item>si</item>
+                            <item>no</item>
+                        </one-of>
+                    </rule>
+                </grammar>
+            </field>
+            <filled>
+                <if cond="opinionAfterVote == 'no'">
+                    <prompt xml:lang="it-it">Thank you for your vote!</prompt>
+                    <goto next="#mainEn"/>
+                <else/>
+                    <goto next="#opinionEn"/>
+                </if>
+            </filled>                
+    </form>
+    <form id="opinionIt"> <!--Opinion-->
         <record  name="msg" beep="true" maxtime="10s" finalsilence="4000ms"
             dtmfterm="true" type="audio/x-wav">
             <prompt xml:lang="it-it" timeout="5s">
-                Record a message after the beep.
+                Record your opinion after the beep.
             </prompt>
             <noinput>
-                I didn't hear anything, please try again.
+                Non ho sentito nulla, riprova.
             </noinput>
         </record>
         <field name="confirm">
@@ -45,7 +124,7 @@
                 Your opinion is <audio expr="msg"/>.
             </prompt>
             <prompt xml:lang="it-it">
-                To keep it, say yes.  To discard it, say no.
+                To keep it, say yes. To discard it, say no.
             </prompt>
             <filled>
                 <if cond="confirm">

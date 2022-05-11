@@ -82,7 +82,7 @@
           <li class="d-flex flex-row bd-highlight list-group-item">
               <div class="p-2 bd-highlight">
                   <audio controls>
-                      <source src="{{ opinion.vote_opinion }}" type="audio/wav">
+                      <source src="{{ opinion.voice_opinion.vote_url }}" type="audio/wav">
                     Your browser does not support the audio element.
                     </audio>
               </div>
@@ -106,7 +106,7 @@
         <li class="d-flex flex-row bd-highlight list-group-item">
             <div class="p-2 bd-highlight">
                 <audio controls>
-                    <source src="{{ opinion.vote_opinion }}" type="audio/wav">
+                    <source src="{{ opinion.voice_opinion.vote_url }}" type="audio/wav">
                   Your browser does not support the audio element.
                   </audio>
             </div>

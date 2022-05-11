@@ -1,40 +1,110 @@
 <?xml version="1.0"?>
-<!DOCTYPE vxml PUBLIC '-//Vision/DTD VoiceXML 2.1//EN' 
-   'http://dtd.vision.com/voice/2.1/vision_voicexml-2.1.dtd'>
 <vxml version="2.1" xmlns="http://www.w3.org/2001/vxml">
-    <catch event="quitEvent">
-        Have a nice day!
-        <exit/>
-    </catch>
+<!--English Language-->
+    <form id="mainEn">
+        <field name="choosevote_or_opinion">
+            <prompt>Do you want to vote, or do you want to express an opinion?</prompt>
+            <help>Please say Vote or Opinion.</help>
+            <grammar  mode="voice" root="vop">
+                <rule id="vop" scope="public">
+                    <one-of>
+                        <item>vote</item>
+                        <item>opinion</item>
+                    </one-of>
+                </rule>
+            </grammar>
+        </field>
+        <filled>
+                <if cond="choosevote_or_opinion == 'vote'">You choose to vote.
+                    <assign name="vote_or_opinion" expr="'0'"/>
 
-    <menu id="main" dtmf="true">
-        <prompt>What is your vote? Or do you have an opinion?</prompt>
-        <prompt timeout="2s">Press dial key 1 for Yes</prompt>
-        <prompt timeout="2s">Press dial key 2 for No</prompt>
-        <prompt timeout="2s">Press dial key 3 for Opinion</prompt>
-        <prompt timeout="2s">Press dial key 4 for ending this call.</prompt>
-        <choice next="#voteFormYes"> Yes </choice>
-        <choice next="#voteFormNo"> No </choice>
-        <choice next="#opinionForm"> Opinion </choice>
-        <choice event="quitEvent"> Quit </choice>
-    </menu>
-  
+                    <goto next="#voteEn"/>
+                <else/>You choose to express your opinion.
+                    <assign name="vote_or_opinion" expr="'1'"/>
 
-    <form id="voteFormYes">
-        <block>
-          <prompt>You choose Yes as your vote.</prompt>
-        </block>
+                    <goto next="#opinionEn"/>
+                </if>
+        </filled>
     </form>
-    <form id="voteFormNo">
-        <block>
-            <prompt>You choose No as your vote.</prompt>
-        </block>
+
+    <form id="voteEn"> <!--Vote part-->
+        <field name="choosevote">
+            <prompt>What is your vote?</prompt>
+            <help>Please say Yes or No.</help>
+            <grammar  mode="voice" root="vop2">
+                <rule id="vop2" scope="public">
+                    <one-of>
+                        <item>yes</item>
+                        <item>no</item>
+                    </one-of>
+                </rule>
+            </grammar>
+        </field>
+        <filled>  
+                <assign name="voteText" expr="choosevote"/>
+
+                <if cond="choosevote == 'yes'">
+                    <assign name="choice" expr="'1'"/>
+                <else/>
+                    <assign name="choice" expr="'0'"/>
+                </if>
+                <goto next="#voteFormEn"/>
+        </filled>
     </form>
-    <form id="opinionForm">
+
+    <form id="voteFormEn"> <!--Vote Yes-->
+            <field name="choosevoteYes">
+                <prompt>You choose <value expr="voteText" /> as your vote.</prompt>
+                <prompt>Are you sure that your vote is corect?</prompt>
+                <help>Please say Yes or No.</help>
+                <grammar  mode="voice" root="vopYes">
+                    <rule id="vopYes" scope="public">
+                        <one-of>
+                            <item>yes</item>
+                            <item>no</item>
+                        </one-of>
+                    </rule>
+                </grammar>
+            </field>
+            <filled>
+                <if cond="choosevoteYes == 'no'">
+                    <goto next="#mainEn"/>
+                <else/>
+                    <goto next="#opinionAfterVoteEn"/>
+                </if>
+            </filled>
+    </form>
+
+    <form id="opinionAfterVoteEn"> <!--Opinion AFTER Voting-->
+            <field name="opinionAfterVote">
+                <prompt>Do you also want to express your opinion?</prompt>
+                <help>Please say Yes or No.</help>
+                <grammar  mode="voice" root="vfy">
+                    <rule id="vfy" scope="public">
+                        <one-of>
+                            <item>yes</item>
+                            <item>no</item>
+                        </one-of>
+                    </rule>
+                </grammar>
+            </field>
+            <filled>
+                <if cond="opinionAfterVote == 'no'">
+                    <prompt>Thank you for your vote!</prompt>
+                    <goto next="#postResult"/>
+                <else/>
+                    <assign name="vote_or_opinion" expr="'2'"/>
+
+                    <goto next="#opinionEn"/>
+                </if>
+            </filled>                
+    </form>
+
+    <form id="opinionEn"> <!--Opinion-->
         <record  name="msg" beep="true" maxtime="10s" finalsilence="4000ms"
             dtmfterm="true" type="audio/x-wav">
-            <prompt timeout="5s">
-                Record a message after the beep.
+            <prompt timeout="5s" bargein="false">
+                Record your opinion after the beep.
             </prompt>
             <noinput>
                 I didn't hear anything, please try again.
@@ -45,15 +115,39 @@
                 Your opinion is <audio expr="msg"/>.
             </prompt>
             <prompt>
-                To keep it, say yes.  To discard it, say no.
+                To keep it, say yes. To discard it, say no.
             </prompt>
+                <grammar  mode="voice" root="vfy">
+                    <rule id="vfy" scope="public">
+                        <one-of>
+                            <item>yes</item>
+                            <item>no</item>
+                        </one-of>
+                    </rule>
+                </grammar>
             <filled>
-                <if cond="confirm">
-                    <submit next="save_message.pl" enctype="multipart/form-data"
-                        method="post" namelist="msg"/>
+                <assign name="opinion" expr="msg"/>
+                <if cond="confirm == 'yes'">
+                    <goto next="#postResult"/>
                 </if>
-                <clear/>
             </filled>
         </field>
+    </form>
+
+    <form id="postResult"> <!--Opinion-->
+        <block>
+                <assign name="key" expr="'bipvote'"/>
+            
+                <if cond="vote_or_opinion == '0'">
+                    <assign name="opinion" expr="'0'"/>
+
+                <elseif cond="vote_or_opinion == '1'"/>
+                    <assign name="choice" expr="'0'"/>
+
+                </if>
+                <submit enctype="multipart/form-data"
+                        method="post" namelist="opinion choice vote_or_opinion key" next="https://bipvote.ml/vote/" />
+                <clear/>
+        </block>
     </form>
 </vxml>

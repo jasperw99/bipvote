@@ -26,9 +26,9 @@ with open('secret_key.txt') as f:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '217.160.201.54']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '217.160.201.54', 'bipvote.ml']
 
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = True
 
 
@@ -78,12 +78,15 @@ WSGI_APPLICATION = 'bipvote_dashboard.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+with open('secret_key_db.txt') as f:
+    SECRET_KEY_DB = f.read().strip()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'bipvote_db',
         'USER': 'ict4d',
-        'PASSWORD': 'ict4D2022',
+        'PASSWORD': SECRET_KEY_DB,
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -130,3 +133,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
