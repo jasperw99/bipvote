@@ -1,4 +1,4 @@
-# bipvote
+# Bipvote(++)
 ## Table of contents
 
 - [Quick start](#quick-start)
