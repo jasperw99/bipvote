@@ -73,7 +73,7 @@
         </div>
     </div>
 
-  <div class="row">
+  <div class="row mb-4">
     <div class="col">
       <ul class="list-group">
           <li class="list-group-item bg-success text-light">Agree</li>
@@ -123,6 +123,32 @@
     </ul>
 </div>
 
+  </div>
+
+  <div class="row mb-4">
+    <div class="col">
+      <ul class="list-group">
+          <li class="list-group-item bg-dark text-light">General opinions</li>
+          {% if general_opinion %}
+          {% for opinion in general_opinion %}
+          <li class="d-flex flex-row bd-highlight list-group-item">
+              <div class="p-2 bd-highlight">
+                  <audio controls>
+                      <source src="{{ opinion.vote_url }}" type="audio/wav">
+                    Your browser does not support the audio element.
+                    </audio>
+              </div>
+              <div class="p-2 bd-highlight align-self-center"><span class="align-text-bottom">{{ opinion.pub_date | date:"l d M Y H:i" }}</span></div>
+          </li>
+          {% endfor %}
+          {% else %}
+          <li class="d-flex flex-row bd-highlight list-group-item">
+
+            <div class="p-2 bd-highlight align-self-center"><span class="align-text-bottom">No opinions yet.</span></div>
+        </li>
+          {% endif %}
+      </ul>
+    </div>
   </div>
 
 </div>

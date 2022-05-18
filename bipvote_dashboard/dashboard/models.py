@@ -13,6 +13,9 @@ class Topic(models.Model):
 
 class VoiceOpinion(models.Model):
     vote_url = models.CharField(max_length=200)
+    is_general = models.BooleanField()
+    pub_date = models.DateTimeField('date published', default=timezone.now)
+
 
 class VoteOpinion(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)

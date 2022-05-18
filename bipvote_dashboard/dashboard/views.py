@@ -22,10 +22,11 @@ def index(request):
     topic_id = latest_topic.id
     latest_pos_opinion = VoteOpinion.objects.exclude(voice_opinion__isnull=True).filter(topic=topic_id, vote_choice=True).order_by('-pub_date')[:10]
     latest_neg_opinion = VoteOpinion.objects.exclude(voice_opinion__isnull=True).filter(topic=topic_id, vote_choice=False).order_by('-pub_date')[:10]
+    general_opinion = VoiceOpinion.objects.exclude(is_general=False).order_by('-pub_date')[:10]
     latest_pos_opinion_nr = VoteOpinion.objects.filter(topic=topic_id, vote_choice=True).order_by('-pub_date').count()
     latest_neg_opinion_nr = VoteOpinion.objects.filter(topic=topic_id, vote_choice=False).order_by('-pub_date').count()
 
-    context = {'pos_opinion': latest_pos_opinion, 'neg_opinion': latest_neg_opinion, 'latest_pos_opinion_nr': latest_pos_opinion_nr, 'latest_neg_opinion_nr': latest_neg_opinion_nr}
+    context = {'pos_opinion': latest_pos_opinion, 'neg_opinion': latest_neg_opinion, 'latest_pos_opinion_nr': latest_pos_opinion_nr, 'latest_neg_opinion_nr': latest_neg_opinion_nr, 'general_opinion': general_opinion}
     return render(request, 'dashboard/index.html', context)
 
 class VoteForm(forms.Form):
@@ -58,11 +59,14 @@ def vote(request):
                 else:
                     if form.cleaned_data['vote_or_opinion'] == '1':
                         opinion_file_name = "opinion" + "_" + timezone.now().strftime("%Y-%m-%d-%H-%M-%S") + random_char(16) + ".wav"
+                        is_general = True
                     else:
                         opinion_file_name = "vote" + "_" + timezone.now().strftime("%Y-%m-%d-%H-%M-%S") + random_char(16) + ".wav"
+                        is_general = False
                     opinion = request.FILES['opinion']
                     write_to_disk(opinion, opinion_file_name)
-                    vOp = VoiceOpinion(vote_url= "/opinions/" + opinion_file_name)
+
+                    vOp = VoiceOpinion(vote_url= "/opinions/" + opinion_file_name, is_general=is_general, pub_date=timezone.now())
                     vOp.save()
                     if form.cleaned_data['vote_or_opinion'] == '2':
                         q = VoteOpinion(voice_opinion=vOp, topic=latest_topic, vote_choice=form.cleaned_data['choice'], pub_date=timezone.now())
