@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <vxml version="2.1" xmlns="http://www.w3.org/2001/vxml">
-   
+
     <!--Choose Language-->
     <menu id="chooseLanguage" dtmf="true">
-        <prompt>Press dial key 1 or say English for continuing in English</prompt>
-        <prompt>Press dial key 2 or say Italian for continuing in Italian</prompt>
-        <prompt timeout="1s">Press dial key 3 or say French for continuing in French</prompt>
+        <prompt>Press dial key 1 for continuing in English</prompt>
+        <prompt xml:lang="it-IT">Premere il tasto di conferma 2 per continuare in italiano.</prompt>
+        <prompt timeout="1s" xml:lang="fr-FR">Appuyez sur la touche de sélection 3 pour continuer en français.</prompt>
         <choice next="https://bipvote.ml/public_img/mainEn.xml"> English </choice>
         <choice next="https://bipvote.ml/public_img/mainIt.xml"> Italian </choice>
         <choice next="https://bipvote.ml/public_img/mainFr.xml"> French </choice>
