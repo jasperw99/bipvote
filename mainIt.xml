@@ -147,7 +147,7 @@
                     <assign name="choice" expr="'0'"/>
 
                 </if>
-                <assign name="lang" expr="'en'"/>
+                <assign name="lang" expr="'it'"/>
                 <submit enctype="multipart/form-data"
                         method="post" namelist="opinion choice vote_or_opinion key lang" next="https://bipvote.ml/vote/" />
                 <clear/>

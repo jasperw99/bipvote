@@ -41,7 +41,7 @@
                 </rule>
             </grammar>
         </field>
-        <filled>  
+        <filled>
                 <assign name="voteText" expr="choosevote"/>
 
                 <if cond="choosevote == 'oui'">
@@ -98,7 +98,7 @@
 
                     <goto next="#opinionEn"/>
                 </if>
-            </filled>                
+            </filled>
     </form>
 
     <form id="opinionEn"> <!--Opinion-->
@@ -138,7 +138,7 @@
     <form id="postResult"> <!--Opinion-->
         <block>
                 <assign name="key" expr="'bipvote'"/>
-            
+
                 <if cond="vote_or_opinion == '0'">
                     <assign name="opinion" expr="'0'"/>
 
@@ -146,7 +146,7 @@
                     <assign name="choice" expr="'0'"/>
 
                 </if>
-                <assign name="lang" expr="'en'"/>
+                <assign name="lang" expr="'fr'"/>
                 <submit enctype="multipart/form-data"
                         method="post" namelist="opinion choice vote_or_opinion key lang" next="https://bipvote.ml/vote/" />
                 <clear/>
