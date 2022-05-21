@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml">
+    <form id="someName">
+        <block>
+            <prompt>Merci pour votre contribution, vous pouvez raccrocher maintenant.</prompt>
+        </block>
+    </form>
+</vxml>

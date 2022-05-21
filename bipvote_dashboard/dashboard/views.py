@@ -34,6 +34,7 @@ class VoteForm(forms.Form):
     key = forms.CharField(label='key', max_length=100)
     vote_or_opinion = forms.CharField(label='vote_or_opinion', max_length=100)
     opinion = forms.FileField(label="opinion", required=False)
+    lang = forms.CharField(label="lang", required=True)
 
 def write_to_disk(f, file_name):
     with open("/var/www/ict4d/opinions/" + file_name, 'wb+') as destination:
@@ -46,11 +47,13 @@ def random_char(y):
 
 @csrf_exempt
 def vote(request):
+    file_lang = "en"
     if request.method == 'POST':
         form = VoteForm(request.POST)
         # print(form.errors)
         if form.is_valid():
             auth_key = form.cleaned_data['key']
+            file_lang = form.cleaned_data['lang']
             if auth_key == 'bipvote':
                 latest_topic = Topic.objects.order_by('-pub_date').first()
                 if form.cleaned_data['vote_or_opinion'] == '0':
@@ -71,8 +74,14 @@ def vote(request):
                     if form.cleaned_data['vote_or_opinion'] == '2':
                         q = VoteOpinion(voice_opinion=vOp, topic=latest_topic, vote_choice=form.cleaned_data['choice'], pub_date=timezone.now())
                         q.save()
+    if file_lang == 'en':
+        output = 'dashboard/thankyou_En.xml'
+    elif file_lang == 'it':
+        output = 'dashboard/thankyou_It.xml'
+    else:
+        output = 'dashboard/thankyou_Fr.xml'
 
-    return render(request, 'dashboard/success.html')
+    return render(request, output, content_type="text/xml")
 
 def topic(request):
     return render(request, 'dashboard/topic.html')

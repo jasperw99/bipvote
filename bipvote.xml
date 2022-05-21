@@ -4,8 +4,10 @@
     <!--Choose Language-->
     <menu id="chooseLanguage" dtmf="true">
         <prompt>Press dial key 1 or say English for continuing in English</prompt>
-        <prompt xml:lang="it-it" timeout="1s">Press dial key 2 or say Italian for continuing in Italian</prompt>
+        <prompt>Press dial key 2 or say Italian for continuing in Italian</prompt>
+        <prompt timeout="1s">Press dial key 3 or say French for continuing in French</prompt>
         <choice next="https://bipvote.ml/public_img/mainEn.xml"> English </choice>
         <choice next="https://bipvote.ml/public_img/mainIt.xml"> Italian </choice>
+        <choice next="https://bipvote.ml/public_img/mainFr.xml"> French </choice>
     </menu>
 </vxml>

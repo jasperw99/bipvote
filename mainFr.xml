@@ -1,27 +1,26 @@
 <?xml version="1.0"?>
-<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml" xml:lang="it-IT">
-<!--Italian Language-->
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml" xml:lang="fr-FR">
+<!--French Language-->
     <form id="mainEn">
         <field name="choosevote_or_opinion">
-            <prompt>Volete votare o esprimere un'opinione?</prompt>
-            <noinput>Per favore, dica voto o opinione.</noinput>
+            <prompt>Voulez-vous voter, ou voulez-vous exprimer une opinion?</prompt>
+            <noinput>Veuillez dire vote ou opinion.</noinput>
+            <nomatch>Veuillez dire vote ou opinion.</nomatch>
             <grammar  mode="voice" root="vop">
                 <rule id="vop" scope="public">
                     <one-of>
-                        <item>voto</item>
-                        <item>opinione</item>
+                        <item>vote</item>
+                        <item>opinion</item>
                     </one-of>
                 </rule>
             </grammar>
         </field>
         <filled>
-                <if cond="choosevote_or_opinion == 'vote'">
-                    <prompt>Scegliete di votare.</prompt>
+                <if cond="choosevote_or_opinion == 'vote'">Vous choisissez de voter.
                     <assign name="vote_or_opinion" expr="'0'"/>
 
                     <goto next="#voteEn"/>
-                <else/>
-                    <prompt>Avete scelto di esprimere la vostra opinione.</prompt>
+                <else/>Vous choisissez d'exprimer votre opinion.
                     <assign name="vote_or_opinion" expr="'1'"/>
 
                     <goto next="#opinionEn"/>
@@ -31,13 +30,13 @@
 
     <form id="voteEn"> <!--Vote part-->
         <field name="choosevote">
-            <prompt>Qual è il vostro voto? Dite sì se siete d'accordo e no se non siete d'accordo.</prompt>
-            <help>Si prega di dire Sì o No.</help>
+            <prompt>Quel est votre vote ? Dites oui si vous êtes d'accord et non si vous n'êtes pas d'accord.</prompt>
+            <help>Veuillez dire Oui ou Non.</help>
             <grammar  mode="voice" root="vop2">
                 <rule id="vop2" scope="public">
                     <one-of>
-                        <item>sì</item>
-                        <item>no</item>
+                        <item>oui</item>
+                        <item>non</item>
                     </one-of>
                 </rule>
             </grammar>
@@ -45,7 +44,7 @@
         <filled>  
                 <assign name="voteText" expr="choosevote"/>
 
-                <if cond="choosevote == 'sì'">
+                <if cond="choosevote == 'oui'">
                     <assign name="choice" expr="'1'"/>
                 <else/>
                     <assign name="choice" expr="'0'"/>
@@ -56,20 +55,20 @@
 
     <form id="voteFormEn"> <!--Vote Yes-->
             <field name="choosevoteYes">
-                <prompt>Scegliete il <value expr="voteText" /> come voto.</prompt>
-                <prompt>Siete sicuri che il vostro voto sia corretto?</prompt>
-                <help>Si prega di dire Sì o No.</help>
+                <prompt>Vous choisissez le <value expr="voteText" /> comme vote.</prompt>
+                <prompt>Etes-vous sûr que votre vote est correct ?</prompt>
+                <help>Veuillez dire Oui ou Non.</help>
                 <grammar  mode="voice" root="vopYes">
                     <rule id="vopYes" scope="public">
                         <one-of>
-                            <item>sì</item>
-                            <item>no</item>
+                            <item>oui</item>
+                            <item>non</item>
                         </one-of>
                     </rule>
                 </grammar>
             </field>
             <filled>
-                <if cond="choosevoteYes == 'no'">
+                <if cond="choosevoteYes == 'non'">
                     <goto next="#mainEn"/>
                 <else/>
                     <goto next="#opinionAfterVoteEn"/>
@@ -79,20 +78,20 @@
 
     <form id="opinionAfterVoteEn"> <!--Opinion AFTER Voting-->
             <field name="opinionAfterVote">
-                <prompt>Volete anche voi esprimere la vostra opinione?</prompt>
-                <noinput>Si prega di dire Sì o No.</noinput>
-                <nomatch>Si prega di dire Sì o No.</nomatch>
+                <prompt>Voulez-vous également exprimer votre opinion ?</prompt>
+                <noinput>Veuillez dire Oui ou Non.</noinput>
+                <nomatch>Veuillez dire Oui ou Non.</nomatch>
                 <grammar  mode="voice" root="vfy">
                     <rule id="vfy" scope="public">
                         <one-of>
-                            <item>sì</item>
-                            <item>no</item>
+                            <item>oui</item>
+                            <item>non</item>
                         </one-of>
                     </rule>
                 </grammar>
             </field>
             <filled>
-                <if cond="opinionAfterVote == 'no'">
+                <if cond="opinionAfterVote == 'non'">
                     <goto next="#postResult"/>
                 <else/>
                     <assign name="vote_or_opinion" expr="'2'"/>
@@ -106,30 +105,30 @@
         <record  name="msg" beep="true" maxtime="10s" finalsilence="2000ms"
             dtmfterm="true" type="audio/x-wav">
             <prompt timeout="2s" bargein="false">
-                Registrate la vostra opinione dopo il segnale acustico.
+                Enregistrez votre opinion après le bip.
             </prompt>
             <noinput>
-                Non ho sentito nulla, riprovi.
+                Je n'ai rien entendu, veuillez réessayer.
             </noinput>
         </record>
         <field name="confirm">
             <prompt>
-                La sua opinione è <audio expr="msg"/>.
+                Votre opinion est <audio expr="msg"/>.
             </prompt>
             <prompt>
-                Per tenerlo, dite sì. Per scartarlo, dite no.
+                Pour le garder, dites oui. Pour le jeter, dites non.
             </prompt>
                 <grammar  mode="voice" root="vfy">
                     <rule id="vfy" scope="public">
                         <one-of>
-                            <item>sì</item>
-                            <item>no</item>
+                            <item>oui</item>
+                            <item>non</item>
                         </one-of>
                     </rule>
                 </grammar>
             <filled>
                 <assign name="opinion" expr="msg"/>
-                <if cond="confirm == 'sì'">
+                <if cond="confirm == 'oui'">
                     <goto next="#postResult"/>
                 </if>
             </filled>
