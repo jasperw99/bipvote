@@ -15,7 +15,7 @@
             </grammar>
         </field>
         <filled>
-                <if cond="choosevote_or_opinion == 'vote'">
+                <if cond="choosevote_or_opinion == 'voto'">
                     <prompt>Scegliete di votare.</prompt>
                     <assign name="vote_or_opinion" expr="'0'"/>
 
@@ -42,7 +42,7 @@
                 </rule>
             </grammar>
         </field>
-        <filled>  
+        <filled>
                 <assign name="voteText" expr="choosevote"/>
 
                 <if cond="choosevote == 'sì'">
@@ -99,7 +99,7 @@
 
                     <goto next="#opinionEn"/>
                 </if>
-            </filled>                
+            </filled>
     </form>
 
     <form id="opinionEn"> <!--Opinion-->
@@ -139,7 +139,7 @@
     <form id="postResult"> <!--Opinion-->
         <block>
                 <assign name="key" expr="'bipvote'"/>
-            
+
                 <if cond="vote_or_opinion == '0'">
                     <assign name="opinion" expr="'0'"/>
 
